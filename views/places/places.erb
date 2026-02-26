@@ -1,0 +1,10 @@
+<h3>Alla Platser</h3>
+<ul>
+<% @places.each do |place| %>
+    <li>
+        <a href="/places/<%= place['id'] %>"> <%= place['name'] %> </a>
+
+    </li>
+<% end %>
+
+</ul>
