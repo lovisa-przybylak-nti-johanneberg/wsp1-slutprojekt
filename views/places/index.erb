@@ -5,6 +5,11 @@
         <a href="/places/<%= place['id'] %>"> <%= place['name'] %> </a>
 
     </li>
+
+    <form class = "delete" action ="/places/<%=place["id"]%>/delete" method = "post">
+      <input type ="submit" value ="Radera plats">
+    </form>
+
 <% end %>
 
 </ul>

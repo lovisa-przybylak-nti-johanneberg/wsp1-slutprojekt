@@ -17,7 +17,38 @@ class App < Sinatra::Base
 
     # Routen /
     get '/' do
-        erb :index
+      redirect ('/places')
     end
+
+    get '/places' do
+      @places = db.execute('SELECT * FROM places ORDER BY name')
+      p @places
+      erb(:"places/index")
+    end
+
+    get '/places/:id' do | id |
+      @place = db.execute('SELECT * FROM places WHERE id = ' +id).first
+      erb(:"places/show")
+    end
+    
+    #get '/places/new' do
+     # erb(:"places/new")
+    #end
+
+    post '/places/:id/delete' do | id |
+      @place = db.execute('DELETE FROM places WHERE id = ' +id)
+      redirect('/places')
+    end
+
+    #post '/places' do
+     # name = params["place_name"]
+     # rating = params["place_rating"]
+     # review = params["place_review"]
+     # db.execute('INSERT INTO places (name, rating, review) VALUES (?, ?, ?), [name, rating, review]')
+     # redirect('/places')
+    #end
+
+    
+    
 
 end
