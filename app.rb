@@ -20,6 +20,11 @@ class App < Sinatra::Base
       redirect ('/places')
     end
 
+    get '/places/new' do
+          
+      erb(:"places/new")
+    end
+
     get '/places' do
       @places = db.execute('SELECT * FROM places ORDER BY name')
       p @places
@@ -31,22 +36,39 @@ class App < Sinatra::Base
       erb(:"places/show")
     end
     
-    #get '/places/new' do
-     # erb(:"places/new")
-    #end
+    get '/places/:id/edit' do | id |
+
+      @places = db.execute('SELECT * FROM places WHERE id = ?', id).first
+
+      erb(:"places/edit")
+    end
 
     post '/places/:id/delete' do | id |
       @place = db.execute('DELETE FROM places WHERE id = ' +id)
       redirect('/places')
     end
 
-    #post '/places' do
-     # name = params["place_name"]
-     # rating = params["place_rating"]
-     # review = params["place_review"]
-     # db.execute('INSERT INTO places (name, rating, review) VALUES (?, ?, ?), [name, rating, review]')
-     # redirect('/places')
-    #end
+    post '/places' do
+      name = params["place_name"]
+      rating = params["place_rating"]
+      review = params["place_review"]
+      db.execute('INSERT INTO places (name, rating, review) VALUES (?, ?, ?)', [name, rating, review])
+      
+      redirect('/places')
+    end
+
+    post '/places/:id/update' do | id |
+      params
+      updateParams = [
+        params['place_name'], 
+        params['place_rating'], 
+        params['place_review'], 
+        id]
+
+      db.execute('UPDATE places SET place_name = ?, place_rating = ?, place_review = ? WHERE id = ?', updateParams)
+
+      redirect('/places')
+    end
 
     
     
