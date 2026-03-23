@@ -65,7 +65,7 @@ class App < Sinatra::Base
         params['place_review'], 
         id]
 
-      db.execute('UPDATE places SET place_name = ?, place_rating = ?, place_review = ? WHERE id = ?', updateParams)
+      db.execute('UPDATE places SET name = ?, rating = ?, review = ? WHERE id = ?', updateParams)
 
       redirect('/places')
     end

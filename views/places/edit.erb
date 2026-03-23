@@ -1,8 +1,8 @@
 <h3>Redigera din plats</h3>
 
 <form action="/places/<%=@places['id']%>/update" method="post">
-	<label>Namn på plats: <input type="text" name="place_name" value="<%=@places['place_name']%>"></label><br>
-    <label>Rating: <input type="text" name="place_rating" value="<%=@places['place_rating']%>"></label><br>
-    <label>Review: <input type="text" name="place_review" value="<%=@places['place_review']%>"></label><br>
+	<label>Namn på plats: <input type="text" name="place_name" value="<%=@places['name']%>"></label><br>
+    <label>Rating: <input type="text" name="place_rating" value="<%=@places['rating']%>"></label><br>
+    <label>Review: <input type="text" name="place_review" value="<%=@places['review']%>"></label><br>
 	<input type="submit" value="Redigera">
 </form>
