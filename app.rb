@@ -21,25 +21,26 @@ class App < Sinatra::Base
     end
 
     get '/places/new' do
-          
+      @categories = db.execute('SELECT name FROM categories')
       erb(:"places/new")
     end
 
     get '/places' do
       @places = db.execute('SELECT * FROM places ORDER BY name')
+      @categories = db.execute('SELECT name FROM categories')
       p @places
       erb(:"places/index")
     end
 
     get '/places/:id' do | id |
       @place = db.execute('SELECT * FROM places WHERE id = ' +id).first
+      @categories = db.execute('SELECT name FROM categories')
       erb(:"places/show")
     end
     
     get '/places/:id/edit' do | id |
-
       @places = db.execute('SELECT * FROM places WHERE id = ?', id).first
-
+      @categories = db.execute('SELECT name FROM categories')
       erb(:"places/edit")
     end
 
@@ -70,7 +71,20 @@ class App < Sinatra::Base
       redirect('/places')
     end
 
+    get '/categories' do
+      @categories = db.execute('SELECT * FROM categories ORDER BY id')
+      p @categories
+      erb(:"categories/index")
+    end
+
+    get '/categories/:id' do | id |
+      @category = db.execute('SELECT * FROM places WHERE id = ' +id).first
+      @categories = db.execute('SELECT name FROM categories')
+      erb(:"categories/show")
+    end
     
+
+  
     
 
 end

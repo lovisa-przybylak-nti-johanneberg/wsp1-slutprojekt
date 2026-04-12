@@ -7,12 +7,39 @@
     <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
 </head>
 <body>
-  <h1>View-Finder</h1>
-  <h2><a href="/places/new">Ny plats</a></h2>
-  <%= yield %>
-  <hr>
-  <h3>Om oss</h3>
-  <h3>Kontakt</h3>
-  <h3>Inställningar</h3>
+  <header>
+    <h1>View-Finder</h1>
+    <nav>
+      <a href="/places/new" class="btn">Ny plats</a>
+    </nav>
+  </header>
+
+<main>
+  <section class="sidebar">
+    <h2>
+      <a>Kategorier:</a>
+
+    </h2>
+    <ul>
+      <% @categories.each do |category| %>
+        <li>
+          <a href="/categories/<%= category['id'] %>"> <%= category['name'] %> </a>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="content">
+    <%= yield %>
+  </section>
+</main>
+ <footer>
+  <div>
+    <a href="#">Om oss</a>
+    <a href="#">Kontakt</a>
+    <a href="#">Inställningar</a>
+  </div>
+</footer>
+
 </body>
 </html>
