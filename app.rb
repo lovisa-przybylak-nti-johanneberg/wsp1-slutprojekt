@@ -27,8 +27,9 @@ class App < Sinatra::Base
 
     get '/places' do
       @places = db.execute('SELECT * FROM places ORDER BY name')
-      @categories = db.execute('SELECT name FROM categories')
+      @categories = db.execute('SELECT * FROM categories')
       p @places
+      p @categories
       erb(:"places/index")
     end
 
@@ -72,18 +73,25 @@ class App < Sinatra::Base
     end
 
     get '/categories' do
-      @categories = db.execute('SELECT * FROM categories ORDER BY id')
+      @categories = db.execute('SELECT * FROM categories')
       p @categories
       erb(:"categories/index")
     end
 
     get '/categories/:id' do | id |
-      @category = db.execute('SELECT * FROM places WHERE id = ' +id).first
-      @categories = db.execute('SELECT name FROM categories')
+      @categories = db.execute('SELECT * FROM categories')
+      @category = db.execute('SELECT * FROM categories WHERE id = ' +id).first
+      @places = db.excecute('SELECT * FROM places INNER JOIN places_categories ON places.id = places_categories.places_id INNER JOIN categories ON places_categories.categories_id = categories.id WHERE categories.id = ' +id)
+
       erb(:"categories/show")
     end
     
-
+    post '/categories' do
+      name = params["category_name"]
+      db.execute('INSERT INTO places (name) VALUES (?)', [name])
+      
+      redirect('/places')
+    end
   
     
 

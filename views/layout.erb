@@ -10,7 +10,9 @@
   <header>
     <h1>View-Finder</h1>
     <nav>
+      <a href="/places" class="btn">Hem</a>
       <a href="/places/new" class="btn">Ny plats</a>
+      
     </nav>
   </header>
 
@@ -23,7 +25,7 @@
     <ul>
       <% @categories.each do |category| %>
         <li>
-          <a href="/categories/<%= category['id'] %>"> <%= category['name'] %> </a>
+          <a href="/categories/<%= category['id'] %>"> <%= category['name'] %> <%= category['id'] %> </a>
         </li>
       <% end %>
     </ul>

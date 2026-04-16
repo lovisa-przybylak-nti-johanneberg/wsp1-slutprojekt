@@ -46,7 +46,8 @@ class Seeder
     db.execute('INSERT INTO places_categories (places_id, categories_id) VALUES (1, 5)')
     db.execute('INSERT INTO places_categories (places_id, categories_id) VALUES (2, 2)')
     db.execute('INSERT INTO places_categories (places_id, categories_id) VALUES (2, 1)')
-    db.execute('INSERT INTO places_categories (places_id, categories_id) VALUES (3, 5)')
+    db.execute('INSERT INTO places_categories (places_id, categories_id) VALUES (2, 5)')
+    
 
 
 
