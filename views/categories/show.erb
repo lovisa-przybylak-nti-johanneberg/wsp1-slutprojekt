@@ -1,8 +1,8 @@
 <h2>Platser från kategorin <%= @category['name'].capitalize %></h2>
-    
-    <%= @places.each do |places| %>
+ 
+    <% @places.each do |place| %>
         <li>
-            <a href="/places/<%= place['id'] %>"> <%= place['name'] %> </a>
+            <a href="/places/<%= place['place_id'] %>"> <%= place['place_name'] %> </a>
         </li>
     <% end %>
 

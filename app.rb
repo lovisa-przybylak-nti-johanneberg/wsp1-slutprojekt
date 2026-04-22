@@ -80,9 +80,8 @@ class App < Sinatra::Base
 
     get '/categories/:id' do | id |
       @categories = db.execute('SELECT * FROM categories')
-      @category = db.execute('SELECT * FROM categories WHERE id = ' +id).first
-      @places = db.excecute('SELECT * FROM places INNER JOIN places_categories ON places.id = places_categories.places_id INNER JOIN categories ON places_categories.categories_id = categories.id WHERE categories.id = ' +id)
-
+      @category = db.execute('SELECT * FROM categories WHERE id = ?', id).first
+      @places = db.execute('SELECT places.id AS place_id, places.name AS place_name, places.rating, places.review, categories.name AS category_name FROM places INNER JOIN places_categories ON places.id = places_categories.places_id INNER JOIN categories ON places_categories.categories_id = categories.id WHERE categories.id = ?', id)
       erb(:"categories/show")
     end
     
