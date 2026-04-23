@@ -1,5 +1,7 @@
 require 'debug'
 require "awesome_print"
+require 'bcrypt'
+require 'securerandom'
 
 class App < Sinatra::Base
 
@@ -15,38 +17,110 @@ class App < Sinatra::Base
       return @db
     end
 
+    configure do
+        enable :sessions
+        set :session_secret, SecureRandom.hex(64)
+    end
+
+    before do
+      @categories = db.execute('SELECT * FROM categories')
+
+      if session[:user_id]
+        @current_user = db.execute("SELECT * FROM users WHERE id = ?", session[:user_id]).first
+        ap @current_user
+      end
+
+    end
+
     # Routen /
     get '/' do
       redirect ('/places')
     end
 
+
+    get '/admin' do
+      if session[:user_id]
+        erb(:"admin/index")
+      else
+        ap "/admin : Åtkomst nekad."
+        status 401
+        redirect '/acces_denied'
+      end
+    end
+
+    get '/acces_denied' do
+      erb(:acces_denied)
+    end
+
+    get '/login' do
+      erb(:login)
+    end
+
+    post '/login' do
+      request_username = params[:username]
+      request_plain_password = params[:password]
+
+      user = db.execute("SELECT * FROM users WHERE username = ?", request_username).first
+
+      unless user
+        ap "/login : Ogiltigt användarnamn."
+        status 401
+        redirect '/acces_denied'
+      end
+
+      db_id = user["id"].to_i
+      db_password_hashed = user["password"].to_s
+
+      bcrypt_db_password = BCrypt::Password.new(db_password_hashed)
+
+      if bcrypt_db_password == request_plain_password
+        ap "/login : Inloggad -> omdirigerar till admin"
+        session[:user_id] = db_id
+        redirect '/admin'
+      else
+        ap "/login : Ogiltigt lösenord."
+        status 401
+        redirect '/acces_denied'
+      end
+    end
+
+    post '/logout' do
+      ap "Loggar ut"
+      session.clear
+      redirect '/'
+    end
+
+    get '/users/new' do
+      erb(:"users/new")
+    end
+
+
     get '/places/new' do
-      @categories = db.execute('SELECT name FROM categories')
       erb(:"places/new")
     end
 
     get '/places' do
-      @places = db.execute('SELECT * FROM places ORDER BY name')
-      @categories = db.execute('SELECT * FROM categories')
-      p @places
-      p @categories
+      @places = db.execute('SELECT * FROM places ORDER BY name') 
+      @admin = false
+      if session[:user_id]
+        @admin = true
+      end
       erb(:"places/index")
     end
 
     get '/places/:id' do | id |
-      @place = db.execute('SELECT * FROM places WHERE id = ' +id).first
-      @categories = db.execute('SELECT name FROM categories')
+      @place = db.execute('SELECT * FROM places WHERE id = ?', id).first
+
       erb(:"places/show")
     end
     
     get '/places/:id/edit' do | id |
-      @places = db.execute('SELECT * FROM places WHERE id = ?', id).first
-      @categories = db.execute('SELECT name FROM categories')
+      @places = db.execute('SELECT * FROM places WHERE id = ?', id).first 
       erb(:"places/edit")
     end
 
     post '/places/:id/delete' do | id |
-      @place = db.execute('DELETE FROM places WHERE id = ' +id)
+      @place = db.execute('DELETE FROM places WHERE id = ?', id)
       redirect('/places')
     end
 
@@ -74,7 +148,6 @@ class App < Sinatra::Base
 
     get '/categories' do
       @categories = db.execute('SELECT * FROM categories')
-      p @categories
       erb(:"categories/index")
     end
 

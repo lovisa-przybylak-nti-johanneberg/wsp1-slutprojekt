@@ -12,6 +12,8 @@
     <nav>
       <a href="/places" class="btn">Hem</a>
       <a href="/places/new" class="btn">Ny plats</a>
+      <a href="/login" class="btn">Logga in</a>
+
       
     </nav>
   </header>
@@ -25,7 +27,7 @@
     <ul>
       <% @categories.each do |category| %>
         <li>
-          <a href="/categories/<%= category['id'] %>"> <%= category['name'] %> <%= category['id'] %> </a>
+          <a href="/categories/<%= category['id'] %>"> <%= category['name'] %> </a>
         </li>
       <% end %>
     </ul>

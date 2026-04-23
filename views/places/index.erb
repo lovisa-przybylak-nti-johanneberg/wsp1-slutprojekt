@@ -3,15 +3,16 @@
 <% @places.each do |place| %>
     <li>
       <a href="/places/<%= place['id'] %>"> <%= place['name'] %> </a>
-
+    
+    <% if @admin %>
       <form class = "delete" action ="/places/<%=place["id"]%>/delete" method = "post">
         <input type ="submit" value ="Radera">
       </form>
-
+      
       <form action ="/places/<%=place["id"]%>/edit" method = "get">
         <input type ="submit" value ="Redigera">
       </form>
-    
+    <% end %>
     </li>
 
 <% end %>
